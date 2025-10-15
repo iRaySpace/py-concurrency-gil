@@ -12,7 +12,13 @@ class HeavyService:
 
 # NOTE: Just a simple fibonacci to simulate CPU-bound tasks
 # This is implemented as top because Process Pool needs picklable
+_cache = {}
 def _heavy_run(n: int):
+    if n in _cache:
+        return _cache.get(n)
     if n <= 1:
-        return n
-    return _heavy_run(n - 1) + _heavy_run(n - 2)
+        result = n
+    else:
+        result = _heavy_run(n - 1) + _heavy_run(n - 2)
+    _cache[n] = result
+    return result
