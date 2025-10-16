@@ -1,6 +1,5 @@
 import uuid
 from logger import get_logger
-from stats import log_stats
 
 from pool_strategy.thread_pool_strategy import ThreadPoolStrategy
 from pool_strategy.process_pool_strategy import ProcessPoolStrategy
@@ -33,6 +32,3 @@ class Room:
 
         # Third: Race Conditions
         await self.strategy.run(race_service.increment, player)
-
-        # Log Stats
-        log_stats()
