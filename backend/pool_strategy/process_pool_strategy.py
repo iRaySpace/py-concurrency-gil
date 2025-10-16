@@ -1,7 +1,7 @@
 import asyncio
 import multiprocessing
 from concurrent.futures import ProcessPoolExecutor
-from heavy_service.pool_strategy import PoolStrategy
+from pool_strategy.pool_strategy import PoolStrategy
 from logger import get_logger
 
 logger = get_logger()

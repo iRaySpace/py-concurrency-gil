@@ -1,23 +1,34 @@
 import uuid
 from logger import get_logger
 from stats import log_stats
-from heavy_service.heavy_service import HeavyService
+from heavy_service import heavy_service
+from race_service import race_service
+from pool_strategy.thread_pool_strategy import ThreadPoolStrategy
+from pool_strategy.process_pool_strategy import ProcessPoolStrategy
+from big_dto.big_dto import BigDto
 
 
 logger = get_logger()
+RUNS = 40
 
 
 class Room:
     def __init__(self):
-        self.players = {}
-        self.service = HeavyService()
+        self.active_players = {}
+        self.strategy = ThreadPoolStrategy()
 
     async def join(self):
-        await self.service.run(25)
-        logger.info(f"Service [HeavyService] is complete.")
-
+        # First: Memory Leak
         id = str(uuid.uuid4())
-        self.players[id] = id
+        self.active_players[id] = BigDto()
         logger.info(f"Player {id} joined the room.")
 
+        # Second: GIL Limitations
+        await self.strategy.run(heavy_service.run, RUNS)
+        logger.info(f"Service [HeavyService] is complete.")
+
+        # Third: Race Conditions
+        await self.strategy.run(race_service.increment)
+
+        # Log Stats
         log_stats()
