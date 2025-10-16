@@ -34,5 +34,5 @@ def log_mem_diff(before, after):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open("_mem_diff.txt", "a") as f:
         f.write(f"\n--- Mem Diff at {timestamp} ---\n")
-        for stat in diff[:10]: # Top 10 lines because it is too heavy
+        for stat in diff[:5]: # Top 5 lines because it is too heavy
             f.write(str(stat) + "\n")
