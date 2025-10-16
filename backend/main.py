@@ -1,5 +1,6 @@
 import tracemalloc
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from room import Room
 from logger import init_logger
@@ -12,6 +13,13 @@ from leaky_service.leaky_service import get_active_count, get_active_players
 init_logger()
 
 api = FastAPI()
+api.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 room = Room()
 
 @api.get("/ping")
