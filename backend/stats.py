@@ -11,9 +11,6 @@ from logger import get_logger
 
 logger = get_logger()
 
-# Tracing our memory allocation
-tracemalloc.start()
-
 
 def log_stats():
     cpu_count = multiprocessing.cpu_count()

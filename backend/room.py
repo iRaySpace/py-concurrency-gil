@@ -12,7 +12,7 @@ from big_dto.big_dto import BigDto
 
 
 logger = get_logger()
-RUNS = 40
+RUNS = 45
 
 
 class Room:

@@ -14,7 +14,7 @@ _lock = threading.Lock()
 def increment(player: BigDto):
     global _existing_count
     temp = _existing_count
-    time.sleep(0.001)
+    time.sleep(0.005)
     _existing_count = temp + 1
     logger.info(f"Player {player.id} is added to existing players.")
 

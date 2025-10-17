@@ -1,13 +1,14 @@
-import tracemalloc
+import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from room import Room
 from logger import init_logger
-from stats import log_mem_diff, log_stats
 
 from race_service.race_service import get_existing_count
 from leaky_service.leaky_service import get_active_count, get_active_players
+
+from task import log_stats_task
 
 # utils
 init_logger()
@@ -22,6 +23,12 @@ api.add_middleware(
 
 room = Room()
 
+
+@api.on_event("startup")
+async def start_background_tasks():
+    asyncio.create_task(log_stats_task())
+
+
 @api.get("/ping")
 def get_ping():
     return {"message": "pong"}
@@ -29,18 +36,7 @@ def get_ping():
 
 @api.post("/play")
 async def post_play():
-    # NOTE: We snapshot for the memory usage
-    before = tracemalloc.take_snapshot()
-
-    # Where the processing begins!
     await room.play()
-
-    # NOTE: Snapshot also after
-    after = tracemalloc.take_snapshot()
-
-    log_mem_diff(before, after)
-    log_stats()
-
     return {"status": "ok"}
 
 
