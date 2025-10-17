@@ -24,13 +24,21 @@ def init_logger():
                 "formatter": "utc",
                 "class": "logging.StreamHandler",
                 "stream": "ext://sys.stdout",
-            }
+            },
+            "file": {
+                "formatter": "utc",
+                "class": "logging.handlers.RotatingFileHandler",
+                "filename": "_fastapi.txt",
+                "maxBytes": 10_000_000, # 10 MB
+                "backupCount": 5,
+                "encoding": "utf8",
+            },
         },
         "loggers": {
-            "uvicorn": {"handlers": ["default"], "level": "INFO", "propagate": False},
-            "uvicorn.error": {"handlers": ["default"], "level": "INFO", "propagate": False},
-            "uvicorn.access": {"handlers": ["default"], "level": "INFO", "propagate": False},
-            "fastapi": {"handlers": ["default"], "level": "INFO", "propagate": False},
+            "uvicorn": {"handlers": ["default", "file"], "level": "INFO", "propagate": False},
+            "uvicorn.error": {"handlers": ["default", "file"], "level": "INFO", "propagate": False},
+            "uvicorn.access": {"handlers": ["default", "file"], "level": "INFO", "propagate": False},
+            "fastapi": {"handlers": ["default", "file"], "level": "INFO", "propagate": False},
         },
     }
     logging.config.dictConfig(LOGGING_CONFIG)
